@@ -151,10 +151,16 @@ function Peca(localName, peripheral, mqttClient) {
 
             self.peripheral.discoverServices(['713d0000503e4c75ba943148f18d941e'], function (error, services){
                 if(error) {
-                    logger.warn('discoverServices error: ' + error);
+                    logger.error('discoverServices error: ' + error);
                     _resetConnection();
                     return;
                 }
+                if(services.length == 0) {
+                    logger.error('discoverServices error: ' + 'services not found');
+                    _resetConnection();
+                    return;
+                }
+
                 logger.debug('services.length: ' + services.length);
 
                 var pecaService = services[0];
