@@ -6,6 +6,8 @@ var logger = log4js.getLogger();
 
 var DEFAULT_TOPIC = 'peca/'
 
+logger.level = 'warn';
+
 program
     .version('0.1.0')
     .usage('[options] <device name>')
@@ -14,11 +16,18 @@ program
     .option('-u --username <username>', 'username for the broker')
     .option('-P --password <password>', 'password for the broker')
     .option('-t --topic <topic>', 'Base topic name(default: ' + DEFAULT_TOPIC + ')')
+    .option('-v --verbose', 'verbose mode')
+    .option('-d --debug', 'debug mode')
     .parse(process.argv);
 
 if(program.args.length == 0) {
     console.log('Device name missing!');
     program.help();
+}
+if(program.debug) {
+    logger.level = 'debug';
+}else if(program.verbose) {
+    logger.level = 'info';
 }
 var deviceName = program.args[0];
 logger.info('Expected: ' + deviceName);
